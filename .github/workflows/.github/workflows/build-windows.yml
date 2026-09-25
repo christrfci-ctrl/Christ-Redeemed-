@@ -1,1 +1,33 @@
 
+name: Build CRFC Windows Installer
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build app
+        run: npm run build
+
+      - name: Build Windows installer
+        run: npx electron-builder --win
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: CRFC-Church-Management-System-Setup
+          path: release/CRFC-Church-Management-System-Setup.exe
